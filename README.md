@@ -7,7 +7,7 @@ Executing the Python script with no input arguments will cause a help message to
 ![](readme_images/help_message_from_code.png?raw=true)
 
 The list of required and optional arguments to find\_novel\_genes.py is as follows:
-*subject id (-subject). This is the identifier used to reference the subject in PGP, such as "huB1FD55".
+Markup : *subject id (-subject). This is the identifier used to reference the subject in PGP, such as "huB1FD55".
 *subject's diagnosis  (-disease). The database query will return any string, such that the -disease argument is a substring of this string. Providing "hypertrophic" as the argument will match "hypertrophic cardiomyopathy" and similar variations of the disease name.
 *list of genes whose mutations are known to cause the disease (-genes). This argument is optional. If it is not provided, the list of genes will be queried from the MySQL "gene\_disease" table.
 *boolean flag indicating whether to filter by cellular location (-filterByCellularLocation). If this flag is provided, associated genes must be in the same pathway as the input genes, and in the same cellular location. If the flag is not provided, the associated genes may be in a different cellular location from the input gene.
