@@ -1,0 +1,1 @@
+mysqlimport --local --skip-lines=1 --fields-terminated-by=',' --lines-terminated-by='\n' --columns="genome_id,variant_id" --verbose -h bmi210project.czxrvyi7olca.us-west-1.rds.amazonaws.com -P 3306 -u bmi210project -pbmi210project bmi210project variant_genome.txt
