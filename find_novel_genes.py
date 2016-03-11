@@ -4,9 +4,9 @@ import pandas as pd
 from reactome_tools import * 
 from Params import * 
 
-def get_cursor():
+def get_cursor(db_params):
     """ gets MySQLdb cursor to access database """
-    db = mdb.connect('bmi210project.czxrvyi7olca.us-west-1.rds.amazonaws.com', 'bmi210project', 'bmi210project', 'bmi210project', 3306)
+    db = mdb.connect(db_params[0],db_params[1],db_params[2],db_params[3],db_params[4])
     return db, db.cursor()
 
 def disconnect(db,c): 
@@ -21,6 +21,8 @@ def parseArgs():
     helparg=False 
     filterByCellularLocation=False 
     outputf=None
+    maf_threshold=0.01 
+    db_params=['bmi210project.czxrvyi7olca.us-west-1.rds.amazonaws.com','bmi210project','bmi210project','bmi210project',3306]
     for i in range(len(sys.argv)): 
         if sys.argv[i]=="-subject": 
             subject=sys.argv[i+1] 
@@ -41,7 +43,17 @@ def parseArgs():
             outputf=sys.argv[i+1]
         elif sys.argv[i]=='-maf':
             maf_threshold=float(sys.argv[i+1]) 
-    return subject,disease,genes,helparg,filterByCellularLocation,outputf,maf_threshold 
+        elif sys.argv[i]=='-host': 
+            db_params[0]=sys.argv[i+1] 
+        elif sys.argv[i]=='-u': 
+            db_params[1]=sys.argv[i+1] 
+        elif sys.argv[i]=='-p': 
+            db_params[2]=sys.argv[i+1] 
+        elif sys.argv[i]=='-db': 
+            db_params[3]=sys.argv[i+1] 
+        elif sys.argv[i]=='-port': 
+            db_params[4]=int(sys.argv[i+1]) 
+    return subject,disease,genes,helparg,filterByCellularLocation,outputf,maf_threshold,db_params  
 
 #query the database to get a list of genes known to be associated with our disease of interest 
 def getKnownTargetGenes(c,disease): 
@@ -125,11 +137,11 @@ def check_location(c,gene,associated_genes):
         
 
 def main(): 
-    db,c=get_cursor() 
-    subject,disease,genes,helparg,filterByCellularLocation,outputf,maf_threshold=parseArgs() 
+    subject,disease,genes,helparg,filterByCellularLocation,outputf,maf_threshold,db_params=parseArgs() 
+    db,c=get_cursor(db_params) 
     if((subject==None) or (disease==None) or (helparg==True)): 
         print "Usage:"
-        print "python find_novel_genes.py -subject <subject_name> -disease <subject disease> -genes [list of genes, optional] -filterByCellularLocation [optional, only variants in the same cellular location will be returned] -o [optional, output file name] -maf [optional, minor allele frequency threshold]" 
+        print "python find_novel_genes.py\n -subject <subject_name>\n -disease <subject disease>\n -genes [list of genes, optional]\n -filterByCellularLocation [optional, only variants in the same cellular location will be returned]\n -o [optional, output file name]\n -maf [optional, minor allele frequency threshold]\n -h [optional, databse host]\n -u [optional, databse user name]\n -p [optional, password]\n -db [optional, database name]\n -port [optional, database port] " 
         exit() 
 
     print "subject:"+str(subject) 
