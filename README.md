@@ -16,9 +16,9 @@ The list of required and optional arguments to find\_novel\_genes.py is as follo
 
 Examples of how the program can be executed for the three HCM patients analyzed in this project are provided in the shell script  included with the submission: "find\_novel\_genes.sh", illustrated in Figure 2:
 
-![alt tag](https://github.com/annashcherbina/BMI210_NovelGeneCandidatesForDisease/tree/master/readme_images/example_execution.png)
+![](readme_images/example_execution.png?raw=true)
 
 "find\_novel\_genes.py" will generate an output file, as specified by the \-o flag. An example output file for subject "huB1FD55" is illustrated in Figure 3.
 
-![alt tag](https://github.com/annashcherbina/BMI210_NovelGeneCandidatesForDisease/tree/master/readme_images/code_output.png)
+![](readme_images/code_output.png?raw=true)
 
