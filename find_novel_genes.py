@@ -20,7 +20,7 @@ def parseArgs():
     genes=None 
     helparg=False 
     filterByCellularLocation=False 
-    outputf=None 
+    outputf=None
     for i in range(len(sys.argv)): 
         if sys.argv[i]=="-subject": 
             subject=sys.argv[i+1] 
@@ -38,8 +38,10 @@ def parseArgs():
         elif sys.argv[i]=='-filterByCellularLocation': 
             filterByCellularLocation=True 
         elif sys.argv[i]=='-o': 
-            outputf=sys.argv[i+1] 
-    return subject,disease,genes,helparg,filterByCellularLocation,outputf 
+            outputf=sys.argv[i+1]
+        elif sys.argv[i]=='-maf':
+            maf_threshold=float(sys.argv[i+1]) 
+    return subject,disease,genes,helparg,filterByCellularLocation,outputf,maf_threshold 
 
 #query the database to get a list of genes known to be associated with our disease of interest 
 def getKnownTargetGenes(c,disease): 
@@ -68,7 +70,7 @@ def getKnownTargetGenes(c,disease):
     return list(genes) 
 
 
-def get_subject_variants_for_one_gene(c,subject,gene): 
+def get_subject_variants_for_one_gene(c,subject,gene,maf_threshold): 
     #1 get subject id 
     c.execute('select genome_id from genomes where global_human_id like \'%s\' limit 1;'%(subject))
     subject_id=c.fetchone()[0] 
@@ -124,10 +126,10 @@ def check_location(c,gene,associated_genes):
 
 def main(): 
     db,c=get_cursor() 
-    subject,disease,genes,helparg,filterByCellularLocation,outputf=parseArgs() 
+    subject,disease,genes,helparg,filterByCellularLocation,outputf,maf_threshold=parseArgs() 
     if((subject==None) or (disease==None) or (helparg==True)): 
         print "Usage:"
-        print "python find_novel_genes.py -subject <subject_name> -disease <subject disease> -genes [list of genes, optional] -filterByCellularLocation [optional, only variants in the same cellular location will be returned]" 
+        print "python find_novel_genes.py -subject <subject_name> -disease <subject disease> -genes [list of genes, optional] -filterByCellularLocation [optional, only variants in the same cellular location will be returned] -o [optional, output file name] -maf [optional, minor allele frequency threshold]" 
         exit() 
 
     print "subject:"+str(subject) 
